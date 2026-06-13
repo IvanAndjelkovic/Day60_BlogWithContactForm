@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 import requests
 from dotenv import load_dotenv
 import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 load_dotenv()
@@ -28,10 +31,28 @@ def about():
 def contact():
     if request.method == "POST":
         data = request.form
-        print(data["name"])
-        print(data["email"])
-        print(data["phone"])
-        print(data["message"])
+        message_body = f"Name: {data['name']}\nEmail: {data['email']}\nPhone: {data['phone']}\nMessage: {data['message']}"
+        # print(data["name"])
+        # print(data["email"])
+        # print(data["phone"])
+        # print(data["message"])
+        try:
+            # Create MIME message
+            msg = MIMEMultipart()
+            msg['From'] = yahoo_mail
+            msg['To'] = data["email"]
+            msg['Subject'] = "New Message from Your Website"
+
+            # Add body
+            msg.attach(MIMEText(message_body, 'plain', 'utf-8'))
+
+            with smtplib.SMTP("smtp.mail.yahoo.com", 587) as connection:
+                connection.starttls()
+                connection.login(yahoo_mail, app_password)
+                connection.send_message(msg)
+                print(f"Email sent successfully to {data['email']}")
+        except Exception as e:
+            print(f"Failed to send email: {str(e)}")
         return render_template("contact.html", msg="Successfully sent your message!")
     return render_template("contact.html", msg="Contact Me")
 
