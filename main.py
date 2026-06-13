@@ -1,5 +1,14 @@
 from flask import Flask, render_template, request
 import requests
+from dotenv import load_dotenv
+import os
+
+
+load_dotenv()
+yahoo_mail = os.getenv("yahoo_mail")
+app_password = os.getenv("app_password")
+print(yahoo_mail)
+print(app_password)
 
 # USE YOUR OWN npoint LINK! ADD AN IMAGE URL FOR YOUR POST. 👇
 posts = requests.get("https://api.npoint.io/c790b4d5cab58020d391").json()
