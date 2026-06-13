@@ -23,8 +23,8 @@ def contact():
         print(data["email"])
         print(data["phone"])
         print(data["message"])
-        return "<h1>Successfully sent your message</h1>"
-    return render_template("contact.html")
+        return render_template("contact.html", msg="Successfully sent your message!")
+    return render_template("contact.html", msg="Contact Me")
 
 
 @app.route("/post/<int:index>")
